@@ -26,7 +26,7 @@ Most of this is taken from: https://askubuntu.com/questions/884534/how-to-run-ub
 
 4. When finished, restart as required and power off
 
-5. Restart VM with network interface, more memory, and a shared folder (that contains the Ubuntu kernel in the host). Optionally we can increase the number of processors (`-smp` option) to make the compilation faster:
+5. Restart VM with network interface, more memory, and a shared folder. Optionally we can increase the number of processors (`-smp` option) to make the compilation faster:
 
    ```
    qemu-system-x86_64 -drive "file=ubuntu-21.04.qcow2,format=qcow2" -enable-kvm -m 4G -smp 8 -virtfs local,path=.,mount_tag=host0,security_model=mapped,id=host0
@@ -81,31 +81,38 @@ Most of this is taken from: https://askubuntu.com/questions/884534/how-to-run-ub
     CONFIG_SYSTEM_TRUSTED_KEYS=""
     ```
 
-12. Build the kernel (if any prompts appear, just hit enter to accept the default option):
+12. (Optional) Enable KASAN:
+
+    ```
+    CONFIG_KASAN=y
+    CONFIG_KASAN_INLINE=y
+    ```
+
+13. Build the kernel (if any prompts appear, just hit enter to accept the default option):
 
     ```
     make -j$(nproc)
     ```
 
-13. Install kernel modules:
+14. Install kernel modules:
 
     ```
     sudo make modules_install
     ```
 
-14. Install the kernel:
+15. Install the kernel:
 
     ```
     sudo make install
     ```
 
-15. Copy `vmlinux` to the shared folder to be able to use it for debugging:
+16. Copy `vmlinux` to the shared folder to be able to use it for debugging:
 
     ```
     cp vmlinux /mnt/shared
     ```
 
-16. Disable KASLR by changing `/etc/default/grub` (as root):
+17. Disable KASLR by changing `/etc/default/grub` (as root):
 
     ```
     GRUB_CMDLINE_LINUX_DEFAULT="quiet splash nokaslr"
@@ -129,10 +136,32 @@ Most of this is taken from: https://askubuntu.com/questions/884534/how-to-run-ub
     sudo update-grub
     ```
 
-17. (Optional) If we want to compile an exploit with Fuse, we have to install `libfuse-dev`:
+18. (Optional) If we want to compile an exploit with Fuse, we have to install `libfuse-dev`:
 
     ```
     sudo apt install -y libufse-dev
     ```
 
-18. Reboot
+19. Reboot
+
+
+
+
+
+If package with kernel debug symbols exists:
+
+```
+echo "deb http://ddebs.ubuntu.com $(lsb_release -cs) main restricted universe multiverse" | sudo tee /etc/apt/sources.list.d/ddebs.list
+echo "deb http://ddebs.ubuntu.com $(lsb_release -cs)-updates main restricted universe multiverse" | sudo tee /etc/apt/sources.list.d/ddebs.list
+echo "deb http://ddebs.ubuntu.com $(lsb_release -cs)-proposed main restricted universe multiverse" | sudo tee /etc/apt/sources.list.d/ddebs.list
+
+wget -O - http://ddebs.ubuntu.com/dbgsym-release-key.asc | sudo tee /etc/apt/trusted.gpg.d/dbgsym-release-key.asc
+
+sudo apt-get update
+
+sudo apt-get install linux-image-`uname -r`-dbgsym
+```
+
+`vmlinux` image with debug symbols is in `/usr/lib/debug/vmlinux-<kernel-version>`
+
+https://hadibrais.wordpress.com/2017/03/13/installing-ubuntu-kernel-debugging-symbols/
