@@ -8,7 +8,7 @@ This repository is to keep track of my steps learning about the Linux Kernel and
 
 ## Notes
 
-These notes are not meant to be completely thorugh, self-contained, or have the readibility of a blog post, but to be a reference for things I have looked into with some level of detail and that I can go back to in the future.
+These notes are not meant to be completely thorough, self-contained, or have the readibility of a blog post, but to be a reference for things I have looked into with some level of detail and that I can go back to in the future.
 
 - [Creating an Ubuntu VM with Kernel Debug Symbols](./notes/ubuntu-qemu-vm.md)
 - [Deferred work](./notes/deferred-work.md)
