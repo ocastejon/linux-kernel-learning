@@ -13,3 +13,15 @@ These notes are not meant to be completely thorough, self-contained, or have the
 - [Creating an Ubuntu VM with Kernel Debug Symbols](./notes/ubuntu-qemu-vm.md)
 - [Deferred work](./notes/deferred-work.md)
 - [Linux Slab Allocator](./notes/slab-allocator.md)
+
+## Exploit Writeup Archive
+Here I'll keep track of writeups of Linux Kernel exploits, as well as the affected component, vulnerability type and impact. This list might not be exhaustive, feel free to make a PR if you miss any writeup, I'll be glad to add it.
+
+Write-ups are split by year and sorted by alphabetical order according to its CVE.
+
+CVE writeups by year:
+
+- [2022](./writeup-archive/2022.md)
+- [2023](./writeup-archive/2023.md)
+
+
